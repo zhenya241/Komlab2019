@@ -50,7 +50,8 @@ var ComputerScienceComponent = /** @class */ (function () {
         this.linkwords = json.linkwords1;
         var temp = json.links1;
         for (var i = 0; i < temp.length; i++) {
-            var link = { "source": null, "target": null, "left": false, "right": true };
+            var link = { "source": null, "target": null, "left": false, "right": true, "id": null };
+            link.id = temp[i].id;
             if (temp[i].source.includes("nodes[")) {
                 // console.log(temp[i]);
                 var n = parseInt(temp[i].source.split("nodes[")[1].split(']')[0]);
@@ -135,7 +136,7 @@ var ComputerScienceComponent = /** @class */ (function () {
         var svgArray = this.buildMapService.initSvg(this.svg, this.width, this.height, this.path, this.circle, this.linkword, this.glossary, this.gText, this.gImage, this.sliderCircle, this.nodesNextMap, this.toNextMapRect, this.linkwords, this.toNextMapButton, this.gButton);
         //  this.svg = this.buildMapService.initSvg(this.svg, this.width, this.height)
         this.svg = svgArray[0];
-        // add the svg<g> element to group svg shapes together  
+        // add the svg<g> element to group svg shapes together
         this.path = svgArray[1];
         this.circle = svgArray[2];
         this.linkword = svgArray[3];
@@ -149,7 +150,7 @@ var ComputerScienceComponent = /** @class */ (function () {
         var polygon = this.svg.append("polygon")
             .attr('class', 'cluster')
             .attr("points", "380,5 250,30 80,100 0,160 250,450 500,450 1100,450 1050,200")
-            .style("fill", "lightgreen")
+            .style("fill", "white")
             .style('opacity', '0.6')
             .style("stroke", "black")
             .style("strokeWidth", "10px")
@@ -200,26 +201,41 @@ var ComputerScienceComponent = /** @class */ (function () {
         })
             .on('mouseup', function (d) {
             if (_this.svg.selectAll('polygon').attr('visibility') === 'hidden') {
-                _this.svg.selectAll('rect.progress').remove();
-                _this.svg.selectAll('text.progress').remove();
+                _this.svg.select('g.progress').attr('visibility', 'hidden');
             }
         });
+        this.svg.append('text')
+            .attr('class', 'activateCluster')
+            .attr('x', '50')
+            .attr('y', '450')
+            .attr('fill', 'purple')
+            .attr('font-size', '5')
+            .attr('text-anchor', 'middle')
+            .text('activate cluster');
         var button = this.svg.append("foreignObject")
             .attr("width", 80)
             .attr("height", 40)
-            .attr('x', '550')
-            .attr('y', '10')
-            .append('xhtml:div')
-            .attr('class', 'button')
-            .html('<a href="http://localhost:4200/computerScience/modify1" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Modify</a>');
-        var button1 = this.svg.append("foreignObject")
-            .attr("width", 80)
-            .attr("height", 40)
             .attr('x', '640')
-            .attr('y', '10')
+            .attr('y', '5')
             .append('xhtml:div')
             .attr('class', 'button')
-            .html('<a href="http://localhost:4200/computerScience/test1" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Test</a>');
+            .html('<a href="http://127.0.0.1:3000/computerScience/modify1" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Modify</a>');
+        var button1 = this.svg.append("foreignObject")
+            .attr("width", 110)
+            .attr("height", 40)
+            .attr('x', '520')
+            .attr('y', '25')
+            .append('xhtml:div')
+            .attr('class', 'button')
+            .html('<a href="http://127.0.0.1:3000/computerScience/test1" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Block Test</a>');
+        var button2 = this.svg.append("foreignObject")
+            .attr("width", 110)
+            .attr("height", 40)
+            .attr('x', '730')
+            .attr('y', '25')
+            .append('xhtml:div')
+            .attr('class', 'button')
+            .html('<a href="http://127.0.0.1:3000/computerScience/singleChoice" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Choice Test</a>');
         // refresh after each mousedown and mouseup
         this.svg.on('mousedown', function (dataItem, value, source) { return _this.mousedown(dataItem, value, source); });
         this.restart();

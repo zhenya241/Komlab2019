@@ -5,7 +5,9 @@
     -moz-user-select: none;
     -ms-user-select: none;
     -o-user-select: none;
-    user-select: none;
+	user-select: none;
+	display: block;
+	margin: auto;
   }
 
   ::ng-deep ellipse.node {
@@ -16,17 +18,17 @@
   ::ng-deep path.link {
     fill: none;
     stroke: rgb(0, 0, 0);
-    stroke-width: 4px;
+    stroke-width: 5px;
     cursor: default;
   }
 
   ::ng-deep text{
-    font: 10px sans-serif;
+    font: 15px sans-serif;
     pointer-events: none;
   }
 
   ::ng-deep text.gText{
-    font: 4px sans-serif;
+    font: 15px sans-serif;
     pointer-events: none;
   }
 

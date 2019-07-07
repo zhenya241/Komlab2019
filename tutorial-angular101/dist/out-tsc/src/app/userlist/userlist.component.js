@@ -9,14 +9,15 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 import { Component } from '@angular/core';
 import { first } from 'rxjs/operators';
-import { AuthenticationService } from '@/services/authentication.service';
 import { UserService } from '@/services/user.service';
+import { AuthenticationService } from '@/services/authentication.service';
 var UserlistComponent = /** @class */ (function () {
-    function UserlistComponent(authenticationService, userService) {
-        this.authenticationService = authenticationService;
+    function UserlistComponent(userService, authenticationService) {
+        var _this = this;
         this.userService = userService;
+        this.authenticationService = authenticationService;
         this.users = [];
-        this.currentUser = this.authenticationService.currentUserValue;
+        this.authenticationService.currentUser.subscribe(function (x) { return _this.currentUser = x; });
     }
     UserlistComponent.prototype.ngOnInit = function () {
         this.loadAllUsers();
@@ -39,8 +40,8 @@ var UserlistComponent = /** @class */ (function () {
             templateUrl: './userlist.component.html',
             styleUrls: ['./userlist.component.css']
         }),
-        __metadata("design:paramtypes", [AuthenticationService,
-            UserService])
+        __metadata("design:paramtypes", [UserService,
+            AuthenticationService])
     ], UserlistComponent);
     return UserlistComponent;
 }());

@@ -50,7 +50,8 @@ var VariableComponent = /** @class */ (function () {
         this.linkwords = json.linkwords3;
         var temp = json.links3;
         for (var i = 0; i < temp.length; i++) {
-            var link = { "source": null, "target": null, "left": false, "right": true };
+            var link = { "source": null, "target": null, "left": false, "right": true, "id": null };
+            link.id = temp[i].id;
             if (temp[i].source.includes("nodes[")) {
                 // console.log(temp[i]);
                 var n = parseInt(temp[i].source.split("nodes[")[1].split(']')[0]);
@@ -148,8 +149,8 @@ var VariableComponent = /** @class */ (function () {
         this.gButton = svgArray[10];
         var polygon = this.svg.append("polygon")
             .attr('class', 'cluster')
-            .attr("points", "380,5 250,30 80,100 0,160 480,450 500,450 950,450 800,200")
-            .style("fill", "lightgreen")
+            .attr("points", "380,35 250,30 80,100 0,160 480,450 500,450 1100,450 1200,200")
+            .style("fill", "white")
             .style('opacity', '0.6')
             .style("stroke", "black")
             .style("strokeWidth", "10px")
@@ -200,26 +201,41 @@ var VariableComponent = /** @class */ (function () {
         })
             .on('mouseup', function (d) {
             if (_this.svg.selectAll('polygon').attr('visibility') === 'hidden') {
-                _this.svg.selectAll('rect.progress').remove();
-                _this.svg.selectAll('text.progress').remove();
+                _this.svg.select('g.progress').attr('visibility', 'hidden');
             }
         });
+        this.svg.append('text')
+            .attr('class', 'activateCluster')
+            .attr('x', '50')
+            .attr('y', '450')
+            .attr('fill', 'purple')
+            .attr('font-size', '5')
+            .attr('text-anchor', 'middle')
+            .text('activate cluster');
         var button = this.svg.append("foreignObject")
             .attr("width", 80)
             .attr("height", 40)
-            .attr('x', '550')
-            .attr('y', '10')
+            .attr('x', '640')
+            .attr('y', '5')
             .append('xhtml:div')
             .attr('class', 'button')
             .html('<a href="http://localhost:4200/variable/modify3" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Modify</a>');
         var button1 = this.svg.append("foreignObject")
-            .attr("width", 80)
+            .attr("width", 110)
             .attr("height", 40)
-            .attr('x', '640')
-            .attr('y', '10')
+            .attr('x', '520')
+            .attr('y', '25')
             .append('xhtml:div')
             .attr('class', 'button')
-            .html('<a href="http://localhost:4200/variable/test3" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Test</a>');
+            .html('<a href="http://localhost:4200/variable/test3" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Block Test</a>');
+        var button2 = this.svg.append("foreignObject")
+            .attr("width", 110)
+            .attr("height", 40)
+            .attr('x', '730')
+            .attr('y', '25')
+            .append('xhtml:div')
+            .attr('class', 'button')
+            .html('<a href="http://localhost:4200/variable/singleChoice" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Choice Test</a>');
         // refresh after each mousedown and mouseup
         this.svg.on('mousedown', function (dataItem, value, source) { return _this.mousedown(dataItem, value, source); });
         this.restart();
@@ -264,8 +280,12 @@ var VariableComponent = /** @class */ (function () {
             // this.svg.selectAll('image.gImage').remove();
         }
     };
+    VariableComponent.prototype.delayNavigation = function () {
+        this.router.navigate([this.routerLink]);
+    };
     // refresh function
     VariableComponent.prototype.restart = function () {
+        var _this = this;
         var offset = 0;
         var buildMap = this.buildMapService.buildMicroMap(this.svg, this.path, this.links, this.glossary, this.glossaries, this.gText, this.gTexts, this.gImage, this.gButton, this.circle, this.nodes, this.linkword, this.linkwords, this.sliderCircle, this.nodesNextMap, this.circleNextMap, offset, 'variable');
         this.pageNumber = this.svg.attr("page");
@@ -287,36 +307,102 @@ var VariableComponent = /** @class */ (function () {
         this.gButton = buildMap[9];
         this.gButton.merge(this.gButton);
         this.routerLink = buildMap[8];
-        // console.log(this.routerLink);
-        // this.svg.selectAll('ellipse').transition()
-        // .duration(0)
-        // .attr('transform', 'translate(' + -600  + ',' + 0 + ')');
-        // this.svg.selectAll('text.eText').transition()
-        // .duration(0)
-        // .attr('transform', 'translate(' + -600  + ',' + 0 + ')');
-        // this.svg.selectAll('text.linkword').transition()
-        // .duration(0)
-        // .attr('transform', 'translate(' + -600  + ',' + 0 + ')');
-        // this.svg.selectAll('path.link').transition()
-        // .duration(0)
-        // .attr('transform', 'translate(' + -600  + ',' + 0 + ')');
-        // this.svg.selectAll('ellipse.linkword').transition()
-        // .duration(0)
-        // .attr('transform', 'translate(' + -600  + ',' + 0 + ')');
-        // this.svg.selectAll('rect.gRect').transition()
-        // .duration(0)
-        // .attr('transform', 'translate(' + -600  + ',' + 0 + ')');
-        // this.svg.selectAll('text.gText').transition()
-        // .duration(0)
-        // .attr('transform', 'translate(' + -600  + ',' + 0 + ')');
-        // this.svg.selectAll('image.gImage').transition()
-        // .duration(0)
-        // .attr('transform', 'translate(' + -600  + ',' + 0 + ')');
-        // this.svg.selectAll('text.eTextNextMap').transition()
-        //   .duration(0)
-        //   .attr('transform', 'translate(' + -600  + ',' + 0 + ')');
-        this.routerLink = buildMap[8];
-        console.log(this.routerLink);
+        if (this.routerLink === '/program') {
+            this.svg.selectAll('ellipse').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 900 + ',' + 0 + ')');
+            this.svg.selectAll('text.eText').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 900 + ',' + 0 + ')');
+            this.svg.selectAll('text.linkword').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 900 + ',' + 0 + ')');
+            this.svg.selectAll('path.link').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 900 + ',' + 0 + ')');
+            this.svg.selectAll('ellipse.linkword').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 900 + ',' + 0 + ')');
+            this.svg.selectAll('rect.gRect').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 900 + ',' + 0 + ')');
+            this.svg.selectAll('text.gText').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 900 + ',' + 0 + ')');
+            this.svg.selectAll('image.gImage').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 900 + ',' + 0 + ')');
+            this.svg.selectAll('text.eTextNextMap').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 900 + ',' + 0 + ')');
+        }
+        else if (this.routerLink === '/method') {
+            this.svg.selectAll('ellipse').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 0 + ',' + 260 + ')');
+            this.svg.selectAll('text.eText').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 0 + ',' + 260 + ')');
+            this.svg.selectAll('text.linkword').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 0 + ',' + 260 + ')');
+            this.svg.selectAll('path.link').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 0 + ',' + 260 + ')');
+            this.svg.selectAll('ellipse.linkword').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 0 + ',' + 260 + ')');
+            this.svg.selectAll('rect.gRect').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 0 + ',' + 260 + ')');
+            this.svg.selectAll('text.gText').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 0 + ',' + 260 + ')');
+            this.svg.selectAll('image.gImage').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 0 + ',' + 260 + ')');
+            this.svg.selectAll('text.eTextNextMap').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + 0 + ',' + 260 + ')');
+        }
+        else if (this.routerLink === '/object') {
+            this.svg.selectAll('ellipse').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + -1100 + ',' + 0 + ')');
+            this.svg.selectAll('text.eText').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + -1100 + ',' + 0 + ')');
+            this.svg.selectAll('text.linkword').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + -1100 + ',' + 0 + ')');
+            this.svg.selectAll('path.link').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + -1100 + ',' + 0 + ')');
+            this.svg.selectAll('ellipse.linkword').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + -1100 + ',' + 0 + ')');
+            this.svg.selectAll('rect.gRect').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + -1100 + ',' + 0 + ')');
+            this.svg.selectAll('text.gText').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + -1100 + ',' + 0 + ')');
+            this.svg.selectAll('image.gImage').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + -1100 + ',' + 0 + ')');
+            this.svg.selectAll('text.eTextNextMap').transition()
+                .duration(750)
+                .attr('transform', 'translate(' + -1100 + ',' + 0 + ')');
+        }
+        if (this.routerLink !== null) {
+            setTimeout(function () {
+                d3.select('rect.toNext').attr('visibility', 'hidden');
+                d3.select('text.toNext').attr('visibility', 'hidden');
+                d3.selectAll('rect.button').attr('visibility', 'hidden');
+                d3.select('svg').attr('ready', true);
+            }, 750);
+            setTimeout(function () { _this.delayNavigation(); }, 750);
+        }
     };
     __decorate([
         ViewChild('graphContainer', { static: true }),

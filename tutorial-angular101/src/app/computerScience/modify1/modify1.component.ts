@@ -29,8 +29,8 @@ export class Modify1Component implements OnInit{
 
   ngOnInit(){
 
-
-
+  
+   
    // console.log(json.nodes);
     this.nodes = json.nodes1;
     this.nodesNextMap = json.nodesNextMap1;
@@ -132,7 +132,7 @@ export class Modify1Component implements OnInit{
     //  console.log(this.gTexts);
 
 
-
+ 
     // console.log(this.nodes[0]);
   }
 
@@ -155,13 +155,13 @@ export class Modify1Component implements OnInit{
   linkword: any;
   gText: any;
   gImage: any;
-
+ 
   circleNextMap: any;
   toNextMapRect: any;
   routerLink: any;
   toNextMapButton: any;
-
-
+  
+ 
 
   selectedNode = null;
   selectedLink = null;
@@ -188,9 +188,9 @@ gTexts = [];
 
   ngAfterContentInit() {
 
-
+    
     // document.getElementById('slider').style.color = 'black';
-
+    
     // (<HTMLInputElement>document.getElementById('slider')).onchange = this.restart;
 
 
@@ -198,7 +198,7 @@ gTexts = [];
 
   //  this.svg = this.modifyMapService.initSvg(this.svg, this.width, this.height)
   this.svg = svgArray[0];
-  // add the svg<g> element to group svg shapes together
+  // add the svg<g> element to group svg shapes together  
   this.path = svgArray[1];
   this.circle = svgArray[2];
   this.linkword = svgArray[3];
@@ -209,7 +209,7 @@ gTexts = [];
   this.toNextMapRect = svgArray[8];
 
 
-
+ 
     // this part works with normal html element
 
     // this.svg.append("foreignObject")
@@ -253,7 +253,7 @@ gTexts = [];
     this.svg.classed('active', true);
 
     console.log('mousedown');
-
+    
 
     if (this.svg.attr('clickOnNode')==='false') {
 
@@ -287,7 +287,7 @@ delayNavigation() {
 
 
 // refresh function
-  restart() {
+  restart() {  
 
     // console.log('restart');
 
@@ -321,7 +321,7 @@ this.routerLink = buildMap[8];
 // console.log(this.routerLink);
 
 if(this.routerLink!=null){
-
+  
   this.svg.selectAll('ellipse').transition()
   .duration(750)
   .attr('transform', 'translate(' + -600  + ',' + 0 + ')');
@@ -364,7 +364,7 @@ if(this.routerLink!=null){
 
 
 
-
+  
 }
 
 

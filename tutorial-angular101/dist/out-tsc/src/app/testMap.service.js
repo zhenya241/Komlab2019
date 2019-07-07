@@ -113,40 +113,43 @@ var TestMapService = /** @class */ (function () {
             .attr('visibility', function (d) {
             return svg.select('rect.toNext').attr('visibility');
         });
-        toNextMapButton = svg.append('svg:rect')
-            .attr('class', 'button')
+        toNextMapButton = svg.append('foreignObject')
+            .attr('class', 'toNext')
             .attr('x', '320')
-            .attr('y', '170')
+            .attr('y', '150')
             .attr('width', '150')
-            .attr('height', '30')
-            .attr('rx', '5')
-            .attr('ry', '5')
-            .style('opacity', '0.9')
-            .attr('fill', 'green')
+            .attr('height', '60')
             .attr('visibility', function (d) {
             return svg.select('rect.toNext').attr('visibility');
         })
             .on('mousedown', function (d) {
-            svg.select('text.toNext').attr('routerLink', '/variable');
+            svg.select('text.toNext').attr('routerLink', d3.select('rect.toNext').attr('link'));
+            svg.selectAll('foreignObject.input').attr('visibility', 'hidden');
         });
-        toNextMapButton = svg.append('svg:rect')
+        ;
+        toNextMapButton
+            .append('xhtml:div')
             .attr('class', 'button')
+            .html('<button type="button" class="btn btn-success btn-lg btn-block">Yes</button>');
+        toNextMapButton = svg.append('foreignObject')
+            .attr('class', 'toNext')
             .attr('x', '690')
-            .attr('y', '170')
+            .attr('y', '150')
             .attr('width', '150')
-            .attr('height', '30')
-            .attr('rx', '5')
-            .attr('ry', '5')
-            .style('opacity', '0.9')
-            .attr('fill', 'red')
+            .attr('height', '60')
             .attr('visibility', function (d) {
             return svg.select('rect.toNext').attr('visibility');
         })
             .on('mousedown', function (d) {
             svg.select('rect.toNext').attr('visibility', 'hidden');
             svg.select('text.toNext').attr('visibility', 'hidden');
-            svg.selectAll('rect.button').attr('visibility', 'hidden');
+            svg.selectAll('foreignObject.toNext').attr('visibility', 'hidden');
+            svg.selectAll('foreignObject.input').attr('visibility', 'visible');
         });
+        toNextMapButton
+            .append('xhtml:div')
+            .attr('class', 'button')
+            .html('<button type="button" class="btn btn-danger btn-lg btn-block">No</button>');
         return [svg, path, circle, linkword, circleNextMap, toNextMapRect];
     };
     TestMapService.prototype.buildMicroMap = function (svg, path, links, circle, nodes, linkword, linkwords, nodesNextMap, circleNextMap, offset) {
@@ -200,14 +203,16 @@ var TestMapService = /** @class */ (function () {
             .attr('ry', 20)
             .attr('cx', function (d) { return d.x; })
             .attr('cy', function (d) { return d.y; })
+            .attr('link', function (d) { return d.link; })
             // .attr('fill',(d) => d.id===0? 'red': 'black')
             .style('fill', function (d) { return 'grey'; })
             .style('opacity', '0.9')
             .style('stroke', 'white')
-            .on('mousedown', function (d) {
+            .on('mousedown', function () {
             svg.select('rect.toNext').attr('visibility', 'visible');
+            svg.select('rect.toNext').attr('link', d3.select(this).attr('link'));
             svg.select('text.toNext').attr('visibility', 'visible');
-            svg.selectAll('rect.button').attr('visibility', 'visible');
+            d3.selectAll('foreignObject.toNext').attr('visibility', 'visible');
         });
         // create ellipses
         g.append('svg:ellipse')

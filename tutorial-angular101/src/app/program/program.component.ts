@@ -29,8 +29,8 @@ export class ProgramComponent implements OnInit{
 
 
 
-  ngOnInit(){  
-   
+  ngOnInit(){
+
    // console.log(json.nodes);
     this.nodes = json.nodes2;
     this.nodesNextMap = json.nodesNextMap2;
@@ -155,8 +155,8 @@ export class ProgramComponent implements OnInit{
   toNextMapButton: any;
 
   fullResult : any;
-  
- 
+
+
 
   selectedNode = null;
   selectedLink = null;
@@ -190,9 +190,9 @@ gTexts = [
 
   ngAfterContentInit() {
 
-    
+
     // document.getElementById('slider').style.color = 'black';
-    
+
     // (<HTMLInputElement>document.getElementById('slider')).onchange = this.restart;
 
 
@@ -200,7 +200,7 @@ gTexts = [
 
   //  this.svg = this.buildMapService.initSvg(this.svg, this.width, this.height)
   this.svg = svgArray[0];
-  // add the svg<g> element to group svg shapes together  
+  // add the svg<g> element to group svg shapes together
   this.path = svgArray[1];
   this.circle = svgArray[2];
   this.linkword = svgArray[3];
@@ -247,7 +247,7 @@ gTexts = [
  .attr('fill', 'white')
  .attr('font-size', '5')
  .attr('text-anchor', 'middle')
-  
+
 
 
    polygon.on('mousedown', (d)=>{
@@ -266,7 +266,7 @@ gTexts = [
       if((parseInt(data['program']['blocktest']['total']['true'])+parseInt(data['program']['blocktest']['total']['false'])!==0)){
         resultBlocktest = parseInt(data['program']['blocktest']['total']['true']) / (parseInt(data['program']['blocktest']['total']['true'])+parseInt(data['program']['blocktest']['total']['false']));
       }
-      
+
       this.svg.select('text.progress').text('choiceTest: '+resultChoicetest+'% blockTest: '+resultBlocktest+'%');
   })
   ;
@@ -294,19 +294,23 @@ gTexts = [
   .attr('fill','orange')
   .attr('cursor', 'pointer')
   .on('mousedown', (d)=>{
-    // if(this.svg.selectAll('polygon').attr('visibility')==='hidden'){
-    //   this.svg.selectAll('rect.progress').remove();
-    // }
     this.svg.selectAll('polygon').attr('visibility', this.svg.selectAll('polygon').attr('visibility')==='hidden'?'visible':'hidden')
 
   })
   .on('mouseup', (d)=>{
     if(this.svg.selectAll('polygon').attr('visibility')==='hidden'){
-      this.svg.selectAll('rect.progress').remove();
-      this.svg.selectAll('text.progress').remove();
+      this.svg.select('g.progress').attr('visibility', 'hidden');
     }
 
   })
+    this.svg.append('text')
+  .attr('class', 'activateCluster')
+  .attr('x', '50')
+  .attr('y', '450')
+  .attr('fill', 'purple')
+  .attr('font-size', '5')
+  .attr('text-anchor', 'middle')
+  .text('activate cluster')
 
     // this part works with normal html element
 
@@ -337,24 +341,33 @@ gTexts = [
     // // .src(this.pdfSrc)
 
 
-    var button = this.svg.append("foreignObject")
-    .attr("width", 80)
-    .attr("height", 40)
-    .attr('x', '550')
-    .attr('y', '10')
-    .append('xhtml:div')
-    .attr('class','button')
-    .html('<a href="http://localhost:4200/program/modify2" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Modify</a>');
-
-
-    var button1 = this.svg.append("foreignObject")
+  var button = this.svg.append("foreignObject")
     .attr("width", 80)
     .attr("height", 40)
     .attr('x', '640')
-    .attr('y', '10')
+    .attr('y', '5')
     .append('xhtml:div')
     .attr('class','button')
-    .html('<a href="http://localhost:4200/program/test2" class="btn btn-primary btn-sm active btn-block" role="button" aria-pressed="true">Test</a>');
+    .html('<a href="http://localhost:4200/program/modify2" class="btn btn-primary btn-sm  btn-block" role="button" >Modify</a>');
+
+
+    var button1 = this.svg.append("foreignObject")
+    .attr("width", 110)
+    .attr("height", 40)
+    .attr('x', '520')
+    .attr('y', '25')
+    .append('xhtml:div')
+    .attr('class','button')
+    .html('<a href="http://localhost:4200/program/test2" class="btn btn-primary btn-sm btn-block" role="button" >Block Test</a>');
+
+    var button2 = this.svg.append("foreignObject")
+    .attr("width", 110)
+    .attr("height", 40)
+    .attr('x', '730')
+    .attr('y', '25')
+    .append('xhtml:div')
+    .attr('class','button')
+    .html('<a href="http://localhost:4200/program/single-choice-test2" class="btn btn-primary btn-sm btn-block" role="button">Choice Test</a>');
 
 
 
@@ -373,7 +386,7 @@ gTexts = [
   mousedown(dataItem: any, value: any, source: any) {
     // when mouse down set this.svg as active
     this.svg.classed('active', true);
-    
+
 
     if (this.svg.attr('clickOnNode')==='false') {
         // if click on the same node once again or click on the background, then not zooming
@@ -384,7 +397,7 @@ gTexts = [
          this.k = 1;
 
 
-         
+
          this.svg.transition()
         .duration(750)
         .attr('transform', 'translate(' + this.width / 2 + ',' + this.height / 2 + ')scale(' + this.k + ')translate(' + -this.centerx + ',' + -this.centery + ')');
@@ -435,7 +448,7 @@ delayNavigation() {
 
 
 // refresh function
-  restart() {  
+  restart() {
 
 
 var offset = 0;
@@ -504,7 +517,7 @@ this.routerLink = buildMap[8];
 // console.log(this.routerLink);
 
 if(this.routerLink!=null){
-  
+
   this.svg.selectAll('ellipse').transition()
   .duration(750)
   .attr('transform', 'translate(' +  -900  + ',' + 0 + ')');
@@ -547,7 +560,7 @@ if(this.routerLink!=null){
 
 
 
-  
+
 }
 
 

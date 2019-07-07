@@ -14,8 +14,8 @@ var HomeComponent = /** @class */ (function () {
     function HomeComponent(router) {
         this.router = router;
         this.title = 'KomTest';
-        this.width = 1240;
-        this.height = 570;
+        this.width = 900;
+        this.height = 480;
         this.k = 1;
         this.colors = d3.scaleOrdinal(d3.schemeCategory10);
         this.clickOnNode = false;
@@ -26,14 +26,14 @@ var HomeComponent = /** @class */ (function () {
         this.mouseupNode = null;
         // store the nodes
         this.nodes = [
-            { id: 0, text: 'java', x: 300, y: 70, reflexive: false },
+            { id: 0, text: 'java', x: 400, y: 70, reflexive: false },
             { id: 1, text: 'computer science', x: 150, y: 100, reflexive: false },
             { id: 2, text: 'program', x: 250, y: 300, reflexive: false },
-            { id: 3, text: 'variable', x: 350, y: 275, reflexive: false },
-            { id: 4, text: 'primitive type', x: 430, y: 240, reflexive: false },
-            { id: 5, text: 'object', x: 520, y: 180, reflexive: false },
-            { id: 6, text: 'class', x: 500, y: 120, reflexive: false },
-            { id: 7, text: 'method', x: 520, y: 50, reflexive: false },
+            { id: 3, text: 'variable', x: 350, y: 350, reflexive: false },
+            { id: 4, text: 'primitive type', x: 500, y: 340, reflexive: false },
+            { id: 5, text: 'object', x: 600, y: 260, reflexive: false },
+            { id: 6, text: 'class', x: 700, y: 120, reflexive: false },
+            { id: 7, text: 'method', x: 720, y: 50, reflexive: false },
         ];
         // store the links
         this.links = [
@@ -138,6 +138,12 @@ var HomeComponent = /** @class */ (function () {
         else if (id === 5) {
             this.router.navigate(['/object']);
         }
+        else if (id === 6) {
+            this.router.navigate(['/class']);
+        }
+        else if (id === 7) {
+            this.router.navigate(['/method']);
+        }
         // this.router.navigate(['/page'+id]);
         //  this.router.navigate(['test/singleChoice']);
         // this.router.navigate(['/micro-basic']);
@@ -165,14 +171,14 @@ var HomeComponent = /** @class */ (function () {
             var sourcePadding = 0;
             var targetPadding = 0;
             if (Math.abs(d.source.x - d.target.x) > 10 * Math.abs(d.source.y - d.target.y) || Math.abs(d.source.x - d.target.x) === 10 * Math.abs(d.source.y - d.target.y)) {
-                targetPadding = d.right ? 27 - 0.25 * (2 - xy) : 17 - 0.25 * (2 - xy);
+                targetPadding = d.right ? 70 - 0.25 * (2 - xy) : 35 - 0.25 * (2 - xy);
                 // targetPadding = d.right ? 27-800000*(2-xy)*Math.pow((dist/2310),5) : 17-400000*(2-xy)*Math.pow((dist/2310),5);
             }
             else if (Math.abs(d.source.x - d.target.x) > 3 * Math.abs(d.source.y - d.target.y) || (Math.abs(d.source.x - d.target.x) === 3 * Math.abs(d.source.y - d.target.y))) {
-                targetPadding = d.right ? 27 - 0.8 * (2 - xy) : 17 - 0.8 * (2 - xy);
+                targetPadding = d.right ? 65 - 0.8 * (2 - xy) : 32 - 0.8 * (2 - xy);
             }
             else if (Math.abs(d.source.x - d.target.x) < 3 * Math.abs(d.source.y - d.target.y)) {
-                targetPadding = d.right ? 27 - 4 * (2 - xy) : 17 - 2 * (2 - xy);
+                targetPadding = d.right ? 47 - 4 * (2 - xy) : 37 - 2 * (2 - xy);
             }
             // const targetPadding = d.right ? 27-0.5*(2-xy) : 17-0.5*(2-xy);
             var sourceX = d.source.x + (sourcePadding * normX);
@@ -194,45 +200,42 @@ var HomeComponent = /** @class */ (function () {
             .attr('x', function (d) { return d.target.x; })
             .attr('y', function (d) { return d.target.y; })
             .attr('fill', 'white')
-            .attr('width', '60')
-            .attr('height', '80')
+            .attr('width', '80')
+            .attr('height', '100')
             .attr('visibility', function (d) { return d.hidden ? 'hidden' : 'visible'; });
         // bind the circle with data
         this.circle = this.circle.data(this.nodes, function (d) { return d.id; });
-        // create ellipses
-        this.circle.selectAll('ellipse')
-            .style('fill', function (d) { return (d === _this.selectedNode) ? d3.rgb(_this.colors(d.id)).brighter().toString() : _this.colors(d.id); })
-            .style('stroke', function (d) { return (d === _this.selectedNode) ? 'black' : 'white'; });
         this.circle.exit().remove();
         // for each ellipse create a g element
         var g = this.circle.enter().append('svg:g');
         // create ellipses
         g.append('svg:ellipse')
             .attr('class', 'node')
-            .attr('rx', 55)
-            .attr('ry', 20)
+            .attr('rx', 65)
+            .attr('ry', 30)
             .attr('cx', function (d) { return d.x; })
             .attr('cy', function (d) { return d.y; })
             // .attr('fill',(d) => d.id===0? 'red': 'black')
-            .style('fill', function (d) { return (d === _this.selectedNode) ? d3.rgb(_this.colors(d.id)).brighter().toString() : _this.colors(d.id); })
+            .style('fill', function (d) { return (d.id === 0) ? 'black' : 'blue'; })
             .style('stroke', function (d) { return (d === _this.selectedNode) ? 'black' : 'white'; })
             .on('mousedown', function (d) {
-            // select node
-            _this.mousedownNode = d;
-            _this.selectedNode = (_this.mousedownNode === _this.selectedNode) ? null : _this.mousedownNode;
-            // if click on the same node twice, focus and zoom will be reset
-            _this.centerx = _this.centered !== d ? d.x : _this.width / 2;
-            _this.centery = _this.centered !== d ? d.y : _this.height / 2;
-            _this.k = _this.centered !== d ? 3 : 1;
-            _this.centered = _this.centered !== d ? d : null;
-            _this.clickOnNode = true;
-            _this.svg.selectAll('rect').remove();
-            _this.svg.transition()
-                .duration(750)
-                .attr('transform', 'translate(' + _this.width * _this.k / 2 + ',' + _this.height * _this.k / 2 + ')scale(' + _this.k + ')translate(' + -_this.centerx + ',' + -_this.centery + ')');
-            if (d.id <= 5) {
-                setTimeout(function () { _this.toMicro(d.id); }, 700);
-                // this.toMicro(d.id);
+            if (d.id > 0) {
+                // select node
+                _this.mousedownNode = d;
+                _this.selectedNode = (_this.mousedownNode === _this.selectedNode) ? null : _this.mousedownNode;
+                // if click on the same node twice, focus and zoom will be reset
+                _this.centerx = _this.centered !== d ? d.x : _this.width / 2;
+                _this.centery = _this.centered !== d ? d.y : _this.height / 2;
+                _this.k = _this.centered !== d ? 3 : 1;
+                _this.centered = _this.centered !== d ? d : null;
+                _this.clickOnNode = true;
+                _this.svg.selectAll('rect').remove();
+                _this.svg.transition()
+                    .duration(750)
+                    .attr('transform', 'translate(' + _this.width * _this.k / 2 + ',' + _this.height * _this.k / 2 + ')scale(' + _this.k + ')translate(' + -_this.centerx + ',' + -_this.centery + ')');
+                if (d.id <= 7 && d.id > 0) {
+                    setTimeout(function () { _this.toMicro(d.id); }, 700);
+                }
             }
         })
             .on('mouseover', function (d) {
@@ -255,7 +258,7 @@ var HomeComponent = /** @class */ (function () {
             .attr('x', function (d) { return d.x; })
             .attr('y', function (d) { return d.y; })
             .attr('fill', 'white')
-            .attr('font-size', '5')
+            .attr('font-size', '10')
             .attr('text-anchor', 'middle')
             .text(function (d) { return d.text; });
         this.circle = g.merge(this.circle);

@@ -88,8 +88,8 @@ export class ModifyMapService{
 
 
 // remove node
-    for( var i = 0;i < nodes.length;i++) {
-      if( parseInt( nodes[i]['id'] ) === id) {
+    for(var i = 0;i<nodes.length;i++){
+      if(parseInt(nodes[i]['id'])===id){
         nodes.splice(i,1);
       }
     }
@@ -116,6 +116,8 @@ export class ModifyMapService{
 
   modifyNode(id: number, nodes: any, gTexts: any, glossaries: any){
 
+    console.log(id)
+
     var x;
     var y;
 
@@ -135,26 +137,28 @@ export class ModifyMapService{
 
     var inputField = g.append("foreignObject")
     .attr('class','modify')
-    .attr("width", 80)
-    .attr("height", 50)
+    .attr("width", 120)
+    .attr("height", 45)
     .attr('x',x)
     .attr('y',y)
 
 
     inputField.append("xhtml:input")
     .attr('type', 'text')
-    .style('height','20px')
-    .style('font-size', '1px')
-    .attr('placeholder', 'enter name')
+	.style('height','33px')
+	.style('width','120px')
+    .style('font-size', '12px')
+    .attr('placeholder', 'Enter Concept')
     .attr('id',100)
     ;
 
     var inputButton = g.append("foreignObject")
     .attr('class','modify')
-    .attr("width", 60)
-    .attr("height", 35)
-    .attr('x',x+80)
-    .attr('y',y-5)
+    .attr("width", 120)
+	.attr("height", 45)
+	.attr("margin-left", '5px')
+    .attr('x',x+130)
+    .attr('y',y)
 
     inputButton.append('xhtml:div')
     .attr('class','button')
@@ -315,9 +319,9 @@ export class ModifyMapService{
     inputField.append("xhtml:input")
     .attr('type', 'text')
     .style('height','20px')
-    .style('font-size', '1px')
+    .style('font-size', '10px')
     .attr('id',300)
-    .attr('placeholder', 'enter glossary text')
+    .attr('placeholder', 'Enter Glossary Text')
     ;
 
     var inputFieldPage = g.append("foreignObject")
@@ -331,9 +335,9 @@ export class ModifyMapService{
     inputFieldPage.append("xhtml:input")
     .attr('type', 'text')
     .style('height','20px')
-    .style('font-size', '1px')
+    .style('font-size', '10px')
     .attr('id',400)
-    .attr('placeholder', 'enter page number')
+    .attr('placeholder', 'Enter Page Number')
     ;
 
     var inputButton = g.append("foreignObject")
@@ -465,16 +469,17 @@ export class ModifyMapService{
 
     var inputField = g.append("foreignObject")
     .attr('class','modify')
-    .attr("width", 80)
-    .attr("height", 50)
+    .attr("width", 120)
+    .attr("height", 35)
     .attr('x',x)
     .attr('y',y)
 
 
     inputField.append("xhtml:input")
     .attr('type', 'text')
-    .style('height','20px')
-    .style('font-size', '1px')
+    .style('height','30px')
+	.style('font-size', '10px')
+	.attr('placeholder', 'Enter Linkword')
     .attr('id',200)
     ;
 
@@ -482,8 +487,8 @@ export class ModifyMapService{
     .attr('class','modify')
     .attr("width", 60)
     .attr("height", 35)
-    .attr('x',x+80)
-    .attr('y',y-5)
+    .attr('x',x+130)
+    .attr('y',y-1)
 
     inputButton.append('xhtml:div')
     .attr('class','button')
@@ -694,7 +699,7 @@ export class ModifyMapService{
     }
   )
   .on('mousedown', (d)=>{
-    svg.select('text.toNext').attr('routerLink', '/variable');
+    svg.select('text.toNext').attr('routerLink', d3.select('rect.toNext').attr('link'));
  })
   ;
     ;
@@ -745,7 +750,7 @@ export class ModifyMapService{
    .attr('y', '0')
    .append('xhtml:div')
    .attr('class','button')
-   .html('<button type="button" class="btn btn-primary btn-sm btn-block">drag</button>')
+   .html('<button type="button" class="btn btn-primary btn-sm btn-block">Drag</button>')
 
    var button2 = dropdown.append("foreignObject")
    .attr('class','dropdown2')
@@ -755,7 +760,7 @@ export class ModifyMapService{
    .attr('y', '35')
    .append('xhtml:div')
    .attr('class','button')
-   .html('<button type="button" class="btn btn-primary btn-sm btn-block">modify</button>')
+   .html('<button type="button" class="btn btn-dark btn-sm btn-block">Modify</button>')
 
    var button3 = dropdown.append("foreignObject")
    .attr('class','dropdown3')
@@ -765,7 +770,7 @@ export class ModifyMapService{
    .attr('y', '70')
    .append('xhtml:div')
    .attr('class','button')
-   .html('<button type="button" class="btn btn-primary btn-sm btn-block">delete</button>')
+   .html('<button type="button" class="btn btn-danger btn-sm btn-block">Delete</button>')
 
    // create menu
    var create = svg.append('svg:g')
@@ -816,7 +821,7 @@ export class ModifyMapService{
     .attr('y', '10')
     .append('xhtml:div')
     .attr('class','button')
-    .html('<button type="button" class="btn btn-primary btn-sm active btn-block">Save</button>');
+    .html('<button type="button" class="btn btn-primary btn-sm btn-block">Save</button>');
 
     return [svg, path, circle, linkword, glossary, gText, gImage, circleNextMap, toNextMapRect];
 
@@ -959,12 +964,14 @@ export class ModifyMapService{
     .attr('ry', 20)
     .attr('cx', (d) => d.x)
     .attr('cy', (d) => d.y)
+    .attr('link', (d)=>d.link)
     // .attr('fill',(d) => d.id===0? 'red': 'black')
     .style('fill', (d) => 'grey')
     .style('opacity', '0.9')
     .style('stroke', 'white')
-    .on('mousedown', (d)=>{
+    .on('mousedown', function(){
       svg.select('rect.toNext').attr('visibility', 'visible');
+      svg.select('rect.toNext').attr('link',d3.select(this).attr('link'));
       svg.select('text.toNext').attr('visibility', 'visible');
       d3.selectAll('foreignObject.toNext').attr('visibility', 'visible');
     })
@@ -1838,7 +1845,7 @@ export class ModifyMapService{
 
             var id = parseInt(nodes.length);
 
-            nodes.push({id: parseInt(nodes.length), text: "", x: d3.select('foreignObject.create1')
+            nodes.push({id: parseInt(nodes[nodes.length-1]['id']+1), text: "", x: d3.select('foreignObject.create1')
             .attr('x'), y: d3.select('foreignObject.create1')
             .attr('y'), reflexive: true});
 
@@ -1860,7 +1867,7 @@ export class ModifyMapService{
             d3.select('svg').select('g.create').attr('visibility','hidden')
 
             // input the text in created ellipse
-            this.modifyNode(id, nodes, gTexts, glossaries);
+            this.modifyNode(parseInt(nodes[nodes.length-1]['id']), nodes, gTexts, glossaries);
           })
 
 
@@ -1869,14 +1876,14 @@ export class ModifyMapService{
 
             var idLinkWord = parseInt(linkwords.length);
 
-            linkwords.push({id: parseInt(linkwords.length), text: "default", x: parseInt(d3.select('foreignObject.create1')
+            linkwords.push({id: parseInt(linkwords[linkwords.length-1]['id'])+1, text: "default", x: parseInt(d3.select('foreignObject.create1')
             .attr('x')),
             y: parseInt(d3.select('foreignObject.create1')
             .attr('y'))});
 
             d3.select('svg').select('g.create').attr('visibility','hidden')
 
-            this.modifyLinkword(id, linkwords);
+            this.modifyLinkword(parseInt(linkwords[linkwords.length-1]['id']), linkwords);
 
 
           }

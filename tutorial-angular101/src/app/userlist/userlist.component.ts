@@ -2,8 +2,8 @@ import { Component, OnInit } from '@angular/core';
 import { first } from 'rxjs/operators';
 
 import { User } from '@/models/user';
-import { AuthenticationService } from '@/services/authentication.service';
 import { UserService } from '@/services/user.service';
+import { AuthenticationService } from '@/services/authentication.service';
 
 @Component({
   selector: 'app-userlist',
@@ -14,10 +14,10 @@ export class UserlistComponent implements OnInit {
   currentUser: User;
   users = [];
   constructor(
-    private authenticationService: AuthenticationService,
-    private userService: UserService
+	private userService: UserService,
+	private authenticationService: AuthenticationService
   ) {
-    this.currentUser = this.authenticationService.currentUserValue;
+		this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
     }
 
   ngOnInit() {

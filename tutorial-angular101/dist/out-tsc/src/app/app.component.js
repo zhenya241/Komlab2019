@@ -17,7 +17,9 @@ var AppComponent = /** @class */ (function () {
         this.authenticationService = authenticationService;
         this.authenticationService.currentUser.subscribe(function (x) { return _this.currentUser = x; });
     }
-    AppComponent.prototype.ngOnInit = function () {
+    AppComponent.prototype.logout = function () {
+        this.authenticationService.logout();
+        this.router.navigate(['/login']);
     };
     AppComponent = __decorate([
         Component({

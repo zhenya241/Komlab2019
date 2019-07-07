@@ -93,6 +93,7 @@ var Test1Component = /** @class */ (function () {
         this.randomItem = this.testMapService.random_item(this.nodes.length);
         for (var i = 0; i < this.randomItem.length; i++) {
             this.svg.append('foreignObject')
+                .attr('class', 'input')
                 .attr('width', 110)
                 .attr('height', 70)
                 .attr('x', this.nodes[this.randomItem[i]].x - 55)

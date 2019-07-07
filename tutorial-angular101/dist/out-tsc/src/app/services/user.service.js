@@ -18,13 +18,13 @@ var UserService = /** @class */ (function () {
         this.http = http;
     }
     UserService.prototype.getAll = function () {
-        return this.http.get(config.apiUrl + "/users");
+        return this.http.get("/users");
     };
     UserService.prototype.register = function (user) {
-        return this.http.post(config.apiUrl + "/users/register", user);
+        return this.http.post("/users/register", user);
     };
     UserService.prototype.delete = function (id) {
-        return this.http.delete(config.apiUrl + "/users/" + id);
+        return this.http.delete("/users/" + id);
     };
     UserService = __decorate([
         Injectable({ providedIn: 'root' }),

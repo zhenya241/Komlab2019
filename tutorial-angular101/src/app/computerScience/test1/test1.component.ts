@@ -138,6 +138,7 @@ export class Test1Component implements OnInit{
 
     for(let i=0; i<this.randomItem.length;i++){
       this.svg.append('foreignObject')
+        .attr('class', 'input')
         .attr('width',110)
         .attr('height',70)
         .attr('x',this.nodes[this.randomItem[i]].x-55)
@@ -174,7 +175,7 @@ export class Test1Component implements OnInit{
   submitAnswer(){
     var resultAnswer = {};
     for(let i=0; i < this.randomItem.length; i++){
-      if( (<HTMLInputElement>document.getElementById(i.toString())).value === this.nodes[this.randomItem[i]].text)
+      if((<HTMLInputElement>document.getElementById(i.toString())).value === this.nodes[this.randomItem[i]].text)
       {
         resultAnswer['node'+this.randomItem[i].toString()] = "true";
         document.getElementById(i.toString()).style.backgroundColor = 'aquamarine';

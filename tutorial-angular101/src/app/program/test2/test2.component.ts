@@ -149,7 +149,7 @@ export class Test2Component implements OnInit{
         .attr('type','text')
         .attr('class','form-control')
         .style('height','10px')
-        .style('font-size','1px')
+        .style('font-size','10px')
         .attr('id',i.toString());
     };
 // refresh after each mousedown and mouseup

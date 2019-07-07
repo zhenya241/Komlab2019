@@ -12,8 +12,10 @@ import { Router } from '@angular/router';
 import { AuthenticationService } from '@/services/authentication.service';
 var NavbarComponent = /** @class */ (function () {
     function NavbarComponent(router, authenticationService) {
+        var _this = this;
         this.router = router;
         this.authenticationService = authenticationService;
+        this.authenticationService.currentUser.subscribe(function (x) { return _this.currentUser = x; });
     }
     NavbarComponent.prototype.ngOnInit = function () {
     };

@@ -96,7 +96,8 @@ var BuildMapService = /** @class */ (function () {
             .attr('cy', function (d) { return d.y - 1; })
             .attr('rx', '10')
             .attr('ry', '10')
-            .attr('fill', 'lightgrey');
+            .attr('fill', 'lightgrey')
+            .attr('visibility', 'hidden');
         svg.selectAll('g.linkword')
             .append('svg:text')
             .attr('class', 'linkword')
@@ -105,6 +106,7 @@ var BuildMapService = /** @class */ (function () {
             .attr('fill', 'red')
             .attr('font-size', '5')
             .attr('text-anchor', 'middle')
+            .attr('visibility', 'hidden')
             .text(function (d) { return d.text; });
         console.log(linkwords.length);
         for (var id = 0; id < parseInt(linkwords.length); id++) {
@@ -117,27 +119,27 @@ var BuildMapService = /** @class */ (function () {
             }).attr('rx', parseInt(textLength) * 2.5 + 8);
         }
         // create slider bar
-        var data = [1, 2, 3, 4];
+        var data = [1, 2, 3];
         var scale = d3.scaleLinear()
             .domain([1, d3.max(data)])
-            .range([0, 300]);
+            .range([0, 200]);
         var x_axis = d3.axisBottom(scale)
-            .ticks(3, "f");
+            .ticks(2, "f");
         svg.append("g")
             .attr('class', 'slider')
-            .attr("transform", "translate(900, 10)")
+            .attr("transform", "translate(1000, 10)")
             .call(x_axis);
         // create ball on the slider bar
         sliderCircle = svg.append("circle")
             .attr('class', 'ball')
-            .attr("cx", 900)
+            .attr("cx", 1000)
             .attr("cy", 10)
             .attr("r", 7)
             .style("fill", "purple");
         svg
             .append('svg:text')
             .attr('class', 'slider')
-            .attr('x', 780)
+            .attr('x', 880)
             .attr('y', 16)
             .attr('text-anchor', 'left')
             // .attr('fill', 'purple')
@@ -175,7 +177,7 @@ var BuildMapService = /** @class */ (function () {
             return svg.select('rect.toNext').attr('visibility');
         })
             .on('mousedown', function (d) {
-            svg.select('text.toNext').attr('routerLink', '/variable');
+            svg.select('text.toNext').attr('routerLink', d3.select('rect.toNext').attr('link'));
         });
         ;
         toNextMapButton
@@ -216,6 +218,7 @@ var BuildMapService = /** @class */ (function () {
             .enter()
             .append('svg:path')
             .attr('class', 'link')
+            .attr('visibility', 'hidden')
             .attr('d', function (d) {
             var deltaX = d.target.x - d.source.x;
             var deltaY = d.target.y - d.source.y;
@@ -253,12 +256,14 @@ var BuildMapService = /** @class */ (function () {
             .attr('ry', 20)
             .attr('cx', function (d) { return d.x; })
             .attr('cy', function (d) { return d.y; })
+            .attr('link', function (d) { return d.link; })
             // .attr('fill',(d) => d.id===0? 'red': 'black')
             .style('fill', function (d) { return 'grey'; })
             .style('opacity', '0.9')
             .style('stroke', 'white')
-            .on('mousedown', function (d) {
+            .on('mousedown', function () {
             svg.select('rect.toNext').attr('visibility', 'visible');
+            svg.select('rect.toNext').attr('link', d3.select(this).attr('link'));
             svg.select('text.toNext').attr('visibility', 'visible');
             svg.selectAll('foreignObject.toNext').attr('visibility', 'visible');
         });
@@ -269,6 +274,8 @@ var BuildMapService = /** @class */ (function () {
             .attr('ry', 20)
             .attr('cx', function (d) { return d.x; })
             .attr('cy', function (d) { return d.y; })
+            .attr('visibility', 'hidden')
+            .attr('level', function (d) { return d.level; })
             // .attr('fill',(d) => d.id===0? 'red': 'black')
             .style('fill', function (d) {
             return 'grey';
@@ -277,8 +284,66 @@ var BuildMapService = /** @class */ (function () {
             .attr('locked', 'true')
             .on('mousedown', function (d) {
             // this code is needed for initialize the mousedown function before dragging the slider bar
-            if (parseInt(svg.select('circle.ball').attr('cx')) === 900) {
-                window.alert("Node locked");
+            if (parseInt(svg.select('circle.ball').attr('cx')) === 1000) {
+                if (parseInt(d.level) > 1) {
+                    window.alert("Node locked");
+                }
+                else {
+                    var id = d['id'];
+                    if (d3.select('svg').selectAll('rect.gRect').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility') === 'hidden') {
+                        d3.select('svg').attr('clickOnNode', 'true');
+                    }
+                    else {
+                        d3.select('svg').attr('clickOnNode', 'false');
+                    }
+                    d3.select('svg').selectAll('rect.gRect').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility', d3.select('svg').selectAll('rect.gRect').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility') === 'hidden' ? 'visible' : 'hidden');
+                    d3.select('svg').selectAll('text.gText').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility', d3.select('svg').selectAll('rect.gRect').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility') === 'hidden' ? 'hidden' : 'visible');
+                    d3.select('svg').selectAll('image.gImage').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility', d3.select('svg').selectAll('rect.gRect').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility') === 'hidden' ? 'hidden' : 'visible');
+                    d3.select('svg').selectAll('foreignObject.gButton').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility', d3.select('svg').selectAll('rect.gRect').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility') === 'hidden' ? 'hidden' : 'visible');
+                    d3.select('svg').selectAll('rect.gRect').filter(function (a, i) {
+                        return i !== id;
+                    }).attr('visibility', 'hidden');
+                    d3.select('svg').selectAll('text.gText').filter(function (a, i) {
+                        return i !== id;
+                    }).attr('visibility', 'hidden');
+                    d3.select('svg').selectAll('image.gImage').filter(function (a, i) {
+                        return i !== id;
+                    }).attr('visibility', 'hidden');
+                    d3.select('svg').selectAll('foreignObject.gButton').filter(function (a, i) {
+                        return i !== id;
+                    }).attr('visibility', 'hidden');
+                    var k = (d3.select('svg').selectAll('rect.gRect').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility') === 'hidden') ? 1 : 3;
+                    // console.log(k);
+                    var x = (d3.select('svg').selectAll('rect.gRect').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility') === 'hidden') ? 620 : d['x'];
+                    var y = (d3.select('svg').selectAll('rect.gRect').filter(function (a, i) {
+                        return i === id;
+                    }).attr('visibility') === 'hidden') ? 240 : d['y'];
+                    d3.select('svg').transition()
+                        .duration(750)
+                        .attr('transform', 'translate(' + (1240 + 2 * offset) * k / 2 + ',' + 480 * k / 2 + ')scale(' + k + ')translate(' + -x + ',' + -y + ')');
+                }
             }
             else {
             }
@@ -297,6 +362,84 @@ var BuildMapService = /** @class */ (function () {
                 .style('stroke', function (d) { return 'white'; })
                 .style('stroke-width', '1.5px');
         });
+        this.testMapService.callServerTest().subscribe(function (data) {
+            if (parseInt(svg.select('circle.ball').attr('cx')) === 1000) {
+                d3.select('svg').selectAll('ellipse.node').attr('visibility', 'hidden');
+                d3.select('svg').selectAll('text.eText').attr('visibility', 'hidden');
+                d3.select('svg').selectAll('path.link').attr('visibility', 'hidden');
+                d3.select('svg').selectAll('ellipse.linkword').attr('visibility', 'hidden');
+                d3.select('svg').selectAll('text.linkword').attr('visibility', 'hidden');
+                var nodeIds = [];
+                for (var t = 0; t < nodes.length; t++) {
+                    if (parseInt(d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
+                        return a['id'] === t;
+                    }).attr('level')) === 1) {
+                        nodeIds.push(t);
+                        d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
+                            return a['id'] === t;
+                        })
+                            .attr('visibility', 'visible')
+                            .style('fill', function (d) {
+                            var correct = parseInt(data[mapName]['blocktest']['node' + t]['true']);
+                            var wrong = parseInt(data[mapName]['blocktest']['node' + t]['false']);
+                            if (correct === 0 && wrong === 0) {
+                                return rgb(125, 0, 0).toString();
+                            }
+                            else if (correct === wrong) {
+                                return rgb(125, 125, 0).toString();
+                            }
+                            else if (correct > wrong) {
+                                return rgb(125 * wrong / correct, 125, 0).toString();
+                            }
+                            else {
+                                return rgb(125, 125 * correct / wrong, 0).toString();
+                            }
+                        });
+                        d3.select('svg').selectAll('text.eText').filter(function (a, i) {
+                            return a['id'] === t;
+                        })
+                            .attr('visibility', 'visible');
+                    }
+                    else {
+                        d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
+                            return a['id'] === t;
+                        })
+                            .style('fill', 'grey');
+                    }
+                }
+                for (var i = 0; i < links.length; i++) {
+                    if (links[i].id.split(' ')[0].split('a')[1] !== undefined) {
+                        if (nodeIds.includes(parseInt(links[i].id.split(' ')[0].split('a')[1]))
+                            && links[i].id.split(' ')[1].split('b')[1] !== undefined) {
+                            var id = parseInt(links[i].id.split(' ')[1].split('b')[1]);
+                            for (var j = 0; j < links.length; j++) {
+                                if (links[j].id.split(' ')[0].split('b')[1] !== undefined) {
+                                    if (parseInt(links[j].id.split(' ')[0].split('b')[1]) === id) {
+                                        if (links[j].id.split(' ')[1].split('a')[1] !== undefined) {
+                                            if (nodeIds.includes(parseInt(links[j].id.split(' ')[1].split('a')[1]))) {
+                                                console.log(id);
+                                                d3.select('svg').selectAll('ellipse.linkword').filter(function (a, i) {
+                                                    return a['id'] === id;
+                                                }).attr('visibility', 'visible');
+                                                d3.select('svg').selectAll('text.linkword').filter(function (a, i) {
+                                                    return a['id'] === id;
+                                                }).attr('visibility', 'visible');
+                                                d3.select('svg').selectAll('path.link').filter(function (a, t) {
+                                                    return t === i;
+                                                }).attr('visibility', 'visible');
+                                                d3.select('svg').selectAll('path.link').filter(function (a, t) {
+                                                    return t === j;
+                                                }).attr('visibility', 'visible');
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
         // create texts
         g.append('svg:text')
             .attr('class', 'eText')
@@ -305,6 +448,7 @@ var BuildMapService = /** @class */ (function () {
             .attr('fill', 'white')
             .attr('font-size', '5')
             .attr('text-anchor', 'middle')
+            .attr('visibility', 'hidden')
             .text(function (d) { return d.text; });
         gNextMap.append('svg:text')
             .attr('class', 'eTextNextMap')
@@ -481,10 +625,7 @@ var BuildMapService = /** @class */ (function () {
             .on('drag', function (d) {
             d3.select(this).attr("cx", function (d) {
                 // console.log(this);
-                if (d3.event.x < 950) {
-                    return 900;
-                }
-                else if (d3.event.x <= 1050) {
+                if (d3.event.x <= 1050) {
                     return 1000;
                 }
                 else if (d3.event.x <= 1150) {
@@ -496,39 +637,84 @@ var BuildMapService = /** @class */ (function () {
             });
             d3.select(this).attr("cy", 10);
             var cx = parseInt(d3.select(this).attr('cx'));
-            if (cx === 900) {
-                d3.select('svg').selectAll('rect.gRect').attr('visibility', 'hidden');
-                d3.select('svg').selectAll('text.gText').attr('visibility', 'hidden');
-                d3.select('svg').selectAll('ellipse.node').style('fill', 'grey').attr('locked', 'true')
-                    .on('mousedown', function (d) { return window.alert("Node locked"); });
-            }
-            else if (cx === 1000) {
+            if (cx === 1000) {
                 d3.select('svg').attr('clickOnNode', 'false');
                 d3.select('svg').selectAll('ellipse.node').attr('locked', 'false');
                 testMapService.callServerTest().subscribe(function (data) {
-                    for (var t = 0; t < nodes.length; t++) {
-                        if (d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
-                            return a['id'] === t;
-                        }).attr('locked') === 'false') {
-                            d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
+                    if (parseInt(svg.select('circle.ball').attr('cx')) === 1000) {
+                        d3.select('svg').selectAll('ellipse.node').attr('visibility', 'hidden');
+                        d3.select('svg').selectAll('text.eText').attr('visibility', 'hidden');
+                        d3.select('svg').selectAll('path.link').attr('visibility', 'hidden');
+                        d3.select('svg').selectAll('ellipse.linkword').attr('visibility', 'hidden');
+                        d3.select('svg').selectAll('text.linkword').attr('visibility', 'hidden');
+                        var nodeIds = [];
+                        for (var t = 0; t < nodes.length; t++) {
+                            if (parseInt(d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
                                 return a['id'] === t;
-                            })
-                                .style('fill', function (d) {
-                                var correct = parseInt(data[mapName]['blocktest']['node' + t]['true']);
-                                var wrong = parseInt(data[mapName]['blocktest']['node' + t]['false']);
-                                if (correct === 0 && wrong === 0) {
-                                    return rgb(125, 0, 0).toString();
+                            }).attr('level')) === 1) {
+                                nodeIds.push(t);
+                                d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
+                                    return a['id'] === t;
+                                })
+                                    .attr('visibility', 'visible')
+                                    .style('fill', function (d) {
+                                    var correct = parseInt(data[mapName]['blocktest']['node' + t]['true']);
+                                    var wrong = parseInt(data[mapName]['blocktest']['node' + t]['false']);
+                                    if (correct === 0 && wrong === 0) {
+                                        return rgb(125, 0, 0).toString();
+                                    }
+                                    else if (correct === wrong) {
+                                        return rgb(125, 125, 0).toString();
+                                    }
+                                    else if (correct > wrong) {
+                                        return rgb(125 * wrong / correct, 125, 0).toString();
+                                    }
+                                    else {
+                                        return rgb(125, 125 * correct / wrong, 0).toString();
+                                    }
+                                });
+                                d3.select('svg').selectAll('text.eText').filter(function (a, i) {
+                                    return a['id'] === t;
+                                })
+                                    .attr('visibility', 'visible');
+                            }
+                            else {
+                                d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
+                                    return a['id'] === t;
+                                })
+                                    .style('fill', 'grey');
+                            }
+                        }
+                        for (var i = 0; i < links.length; i++) {
+                            if (links[i].id.split(' ')[0].split('a')[1] !== undefined) {
+                                if (nodeIds.includes(parseInt(links[i].id.split(' ')[0].split('a')[1]))
+                                    && links[i].id.split(' ')[1].split('b')[1] !== undefined) {
+                                    var id = parseInt(links[i].id.split(' ')[1].split('b')[1]);
+                                    for (var j = 0; j < links.length; j++) {
+                                        if (links[j].id.split(' ')[0].split('b')[1] !== undefined) {
+                                            if (parseInt(links[j].id.split(' ')[0].split('b')[1]) === id) {
+                                                if (links[j].id.split(' ')[1].split('a')[1] !== undefined) {
+                                                    if (nodeIds.includes(parseInt(links[j].id.split(' ')[1].split('a')[1]))) {
+                                                        console.log(id);
+                                                        d3.select('svg').selectAll('ellipse.linkword').filter(function (a, i) {
+                                                            return a['id'] === id;
+                                                        }).attr('visibility', 'visible');
+                                                        d3.select('svg').selectAll('text.linkword').filter(function (a, i) {
+                                                            return a['id'] === id;
+                                                        }).attr('visibility', 'visible');
+                                                        d3.select('svg').selectAll('path.link').filter(function (a, t) {
+                                                            return t === i;
+                                                        }).attr('visibility', 'visible');
+                                                        d3.select('svg').selectAll('path.link').filter(function (a, t) {
+                                                            return t === j;
+                                                        }).attr('visibility', 'visible');
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                else if (correct === wrong) {
-                                    return rgb(125, 125, 0).toString();
-                                }
-                                else if (correct > wrong) {
-                                    return rgb(125 * wrong / correct, 125, 0).toString();
-                                }
-                                else {
-                                    return rgb(125, 125 * correct / wrong, 0).toString();
-                                }
-                            });
+                            }
                         }
                     }
                 });
@@ -600,29 +786,80 @@ var BuildMapService = /** @class */ (function () {
                 d3.select('svg').attr('clickOnNode', 'false');
                 d3.select('svg').selectAll('ellipse.node').attr('locked', 'false');
                 testMapService.callServerTest().subscribe(function (data) {
-                    for (var t = 0; t < nodes.length; t++) {
-                        if (d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
-                            return a['id'] === t;
-                        }).attr('locked') === 'false') {
-                            d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
+                    if (parseInt(svg.select('circle.ball').attr('cx')) === 1100) {
+                        d3.select('svg').selectAll('ellipse.node').attr('visibility', 'hidden');
+                        d3.select('svg').selectAll('text.eText').attr('visibility', 'hidden');
+                        d3.select('svg').selectAll('path.link').attr('visibility', 'hidden');
+                        d3.select('svg').selectAll('ellipse.linkword').attr('visibility', 'hidden');
+                        d3.select('svg').selectAll('text.linkword').attr('visibility', 'hidden');
+                        var nodeIds = [];
+                        for (var t = 0; t < nodes.length; t++) {
+                            if (parseInt(d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
                                 return a['id'] === t;
-                            })
-                                .style('fill', function (d) {
-                                var correct = parseInt(data[mapName]['blocktest']['node' + t]['true']);
-                                var wrong = parseInt(data[mapName]['blocktest']['node' + t]['false']);
-                                if (correct === 0 && wrong === 0) {
-                                    return rgb(125, 0, 0).toString();
+                            }).attr('level')) <= 2) {
+                                nodeIds.push(t);
+                                d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
+                                    return a['id'] === t;
+                                })
+                                    .attr('visibility', 'visible')
+                                    .style('fill', function (d) {
+                                    var correct = parseInt(data[mapName]['blocktest']['node' + t]['true']);
+                                    var wrong = parseInt(data[mapName]['blocktest']['node' + t]['false']);
+                                    if (correct === 0 && wrong === 0) {
+                                        return rgb(125, 0, 0).toString();
+                                    }
+                                    else if (correct === wrong) {
+                                        return rgb(125, 125, 0).toString();
+                                    }
+                                    else if (correct > wrong) {
+                                        return rgb(125 * wrong / correct, 125, 0).toString();
+                                    }
+                                    else {
+                                        return rgb(125, 125 * correct / wrong, 0).toString();
+                                    }
+                                });
+                                d3.select('svg').selectAll('text.eText').filter(function (a, i) {
+                                    return a['id'] === t;
+                                })
+                                    .attr('visibility', 'visible');
+                            }
+                            else {
+                                d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
+                                    return a['id'] === t;
+                                })
+                                    .style('fill', 'grey');
+                            }
+                        }
+                        for (var i = 0; i < links.length; i++) {
+                            if (links[i].id.split(' ')[0].split('a')[1] !== undefined) {
+                                if (nodeIds.includes(parseInt(links[i].id.split(' ')[0].split('a')[1]))
+                                    && links[i].id.split(' ')[1].split('b')[1] !== undefined) {
+                                    var id = parseInt(links[i].id.split(' ')[1].split('b')[1]);
+                                    for (var j = 0; j < links.length; j++) {
+                                        if (links[j].id.split(' ')[0].split('b')[1] !== undefined) {
+                                            if (parseInt(links[j].id.split(' ')[0].split('b')[1]) === id) {
+                                                if (links[j].id.split(' ')[1].split('a')[1] !== undefined) {
+                                                    if (nodeIds.includes(parseInt(links[j].id.split(' ')[1].split('a')[1]))) {
+                                                        console.log(id);
+                                                        d3.select('svg').selectAll('ellipse.linkword').filter(function (a, i) {
+                                                            return a['id'] === id;
+                                                        }).attr('visibility', 'visible');
+                                                        d3.select('svg').selectAll('text.linkword').filter(function (a, i) {
+                                                            return a['id'] === id;
+                                                        }).attr('visibility', 'visible');
+                                                        d3.select('svg').selectAll('path.link').filter(function (a, t) {
+                                                            return t === i;
+                                                        }).attr('visibility', 'visible');
+                                                        d3.select('svg').selectAll('path.link').filter(function (a, t) {
+                                                            return t === j;
+                                                        }).attr('visibility', 'visible');
+                                                    }
+                                                }
+                                            }
+                                        }
+                                    }
                                 }
-                                else if (correct === wrong) {
-                                    return rgb(125, 125, 0).toString();
-                                }
-                                else if (correct > wrong) {
-                                    return rgb(125 * wrong / correct, 125, 0).toString();
-                                }
-                                else {
-                                    return rgb(125, 125 * correct / wrong, 0).toString();
-                                }
-                            });
+                            }
                         }
                     }
                 });
@@ -753,6 +990,11 @@ var BuildMapService = /** @class */ (function () {
                         .attr('transform', 'translate(' + (1240 + 2 * offset) * k / 2 + ',' + 480 * k / 2 + ')scale(' + k + ')translate(' + -x + ',' + -y + ')');
                 });
                 testMapService.callServerTest().subscribe(function (data) {
+                    d3.select('svg').selectAll('ellipse.node').attr('visibility', 'visible');
+                    d3.select('svg').selectAll('text.eText').attr('visibility', 'visible');
+                    d3.select('svg').selectAll('path.link').attr('visibility', 'visible');
+                    d3.select('svg').selectAll('ellipse.linkword').attr('visibility', 'visible');
+                    d3.select('svg').selectAll('text.linkword').attr('visibility', 'visible');
                     for (var t = 0; t < nodes.length; t++) {
                         if (d3.select('svg').selectAll('ellipse.node').filter(function (a, i) {
                             return a['id'] === t;

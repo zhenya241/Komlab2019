@@ -1,6 +1,4 @@
 import { Component, ElementRef, ViewChild, OnInit } from '@angular/core';
-import * as d3 from 'd3';
-import {style} from '@angular/animations';
 import { Router } from '@angular/router';
 
 import { AuthenticationService } from './services/authentication.service';
@@ -21,7 +19,8 @@ export class AppComponent {
     this.authenticationService.currentUser.subscribe(x => this.currentUser = x);
   }
 
-  ngOnInit(){
-
+  logout() {
+        this.authenticationService.logout();
+        this.router.navigate(['/login']);
   }
 }

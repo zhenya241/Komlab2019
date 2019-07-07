@@ -31,7 +31,6 @@ import { AlertComponent } from './alert/alert.component';
 import { RegisterComponent } from './register/register.component';
 import { UserlistComponent } from './userlist/userlist.component';
 import { LoginComponent } from './login/login.component';
-//import { ClassmicromapComponent } from './classmicromap/classmicromap.component';
 import { ModifyMapService } from './modifyMap.service';
 import { BuildMapService } from './buildMap.service';
 import { TestMapService } from './testMap.service';
@@ -39,6 +38,17 @@ import { Test1Component } from './computerScience/test1/test1.component';
 import { Test3Component } from './variable/test3/test3.component';
 import { ObjectComponent } from './object/object.component';
 import { PrimitiveTypeComponent } from './primitive-type/primitive-type.component';
+import { Modify4Component } from './primitive-type/modify4/modify4.component';
+import { Test4Component } from './primitive-type/test4/test4.component';
+import { Modify5Component } from './object/modify5/modify5.component';
+import { Test5Component } from './object/test5/test5.component';
+import { ClassComponent } from './class/class.component';
+import { MethodComponent } from './method/method.component';
+import { Modify6Component } from './class/modify6/modify6.component';
+import { Test6Component } from './class/test6/test6.component';
+import { Modify7Component } from './method/modify7/modify7.component';
+import { Test7Component } from './method/test7/test7.component';
+import { BooklistComponent } from './booklist/booklist.component';
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -65,6 +75,17 @@ var AppModule = /** @class */ (function () {
                 RegisterComponent,
                 UserlistComponent,
                 LoginComponent,
+                Modify4Component,
+                Test4Component,
+                Modify5Component,
+                Test5Component,
+                ClassComponent,
+                MethodComponent,
+                Modify6Component,
+                Test6Component,
+                Modify7Component,
+                Test7Component,
+                BooklistComponent,
             ],
             imports: [
                 BrowserModule,

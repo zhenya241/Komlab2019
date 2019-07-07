@@ -40,7 +40,7 @@ app.get('/get',function(req,res){
 
 function readFile(){
 
-  const path = './test.json'
+  const path = '../src/app/test.json'
   var json = null;
   try {
     if (fs.existsSync(path)) {

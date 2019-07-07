@@ -33,7 +33,7 @@ var AuthenticationService = /** @class */ (function () {
     });
     AuthenticationService.prototype.login = function (username, password) {
         var _this = this;
-        return this.http.post(config.apiUrl + "/users/authenticate", { username: username, password: password })
+        return this.http.post("/users/authenticate", { username: username, password: password })
             .pipe(map(function (user) {
             // store user details and jwt token in local storage to keep user logged in between page refreshes
             localStorage.setItem('currentUser', JSON.stringify(user));
