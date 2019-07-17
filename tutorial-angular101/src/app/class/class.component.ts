@@ -249,11 +249,11 @@ gTexts = [];
       var resultBlocktest = 0;
 
       if((parseInt(data['class']['choicetest']['true'])+parseInt(data['class']['choicetest']['false'])!==0)){
-        resultChoicetest = parseInt(data['class']['choicetest']['true']) / (parseInt(data['class']['choicetest']['true'])+parseInt(data['class']['choicetest']['false']));
+        resultChoicetest = 100*parseInt(data['class']['choicetest']['true']) / (parseInt(data['class']['choicetest']['true'])+parseInt(data['class']['choicetest']['false']));
       }
 
       if((parseInt(data['class']['blocktest']['total']['true'])+parseInt(data['class']['blocktest']['total']['false'])!==0)){
-        resultBlocktest = parseInt(data['class']['blocktest']['total']['true']) / (parseInt(data['class']['blocktest']['total']['true'])+parseInt(data['class']['blocktest']['total']['false']));
+        resultBlocktest = 100*parseInt(data['class']['blocktest']['total']['true']) / (parseInt(data['class']['blocktest']['total']['true'])+parseInt(data['class']['blocktest']['total']['false']));
       }
 
       this.svg.select('text.progress').text('choiceTest: '+resultChoicetest+'% blockTest: '+resultBlocktest+'%');

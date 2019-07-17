@@ -368,7 +368,7 @@ export class TestMapService {
             data[mapName][testMode][key] = parseInt(data[mapName][testMode][key]) + parseInt(resultAnswer[key]);
           }
         }else{
-            this.resultChoicetest= parseInt(data[mapName]['choicetest']['true']) / (parseInt(data[mapName]['choicetest']['true'])+parseInt(data[mapName]['choicetest']['false']));
+            this.resultChoicetest= (parseInt(data[mapName]['choicetest']['true']) / (parseInt(data[mapName]['choicetest']['true'])+parseInt(data[mapName]['choicetest']['false']))) * 100;
             this.resultBlocktest = parseInt(data[mapName]['blocktest']['total']['true']) / (parseInt(data[mapName]['blocktest']['total']['true'])+parseInt(data[mapName]['blocktest']['total']['false']));
         }
         console.log('get: ' + JSON.stringify(data[mapName]['choicetest']));
@@ -388,7 +388,7 @@ export class TestMapService {
       }
     );
     if(testMode === 'getresult'){
-      return 'Choice Test result: '+this.resultChoicetest.toString() + '%          \nBlock Test result: ' + this.resultBlocktest + "%";
+      return 'Choice Test result: '+ this.resultChoicetest.toString() + '%          \nBlock Test result: ' + this.resultBlocktest + "%" + "amk";
     }
 
   }

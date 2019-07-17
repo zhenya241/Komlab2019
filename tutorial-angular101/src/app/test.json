@@ -2,11 +2,11 @@
 	"computer science": {
 		"blocktest": {
 			"node0": {
-				"true": 0,
-				"false": 0
+				"true": 1,
+				"false": 1
 			},
 			"node1": {
-				"true": 0,
+				"true": 3,
 				"false": 0
 			},
 			"node2": {
@@ -14,7 +14,7 @@
 				"false": 0
 			},
 			"node3": {
-				"true": 0,
+				"true": 2,
 				"false": 0
 			},
 			"node4": {
@@ -46,24 +46,24 @@
 				"false": 0
 			},
 			"node11": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node12": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node13": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node14": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"total": {
-				"true": 0,
-				"false": 0
+				"true": 150,
+				"false": 1
 			}
 		},
 		"choicetest": {
@@ -282,24 +282,24 @@
 	"class": {
 		"blocktest": {
 			"node0": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node1": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node2": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node3": {
-				"true": 0,
-				"false": 0
+				"true": 5,
+				"false": 5
 			},
 			"node4": {
-				"true": 0,
-				"false": 0
+				"true": 5,
+				"false": 5
 			},
 			"node5": {
 				"true": 0,
@@ -314,48 +314,48 @@
 				"false": 0
 			},
 			"total": {
-				"true": 0,
-				"false": 0
+				"true": 50,
+				"false": 50
 			}
 		},
 		"choicetest": {
-			"true": 0,
-			"false": 0
+			"true": 60,
+			"false": 40
 		}
 	},
 	"method": {
 		"blocktest": {
 			"node0": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node1": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node2": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node3": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node4": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"node5": {
-				"true": 0,
+				"true": 10,
 				"false": 0
 			},
 			"total": {
-				"true": 0,
-				"false": 0
+				"true": 50,
+				"false": 1
 			}
 		},
 		"choicetest": {
-			"true": 0,
+			"true": 30,
 			"false": 0
 		}
 	}
