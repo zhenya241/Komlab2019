@@ -664,9 +664,9 @@ export class BuildMapService{
     .append('svg:text')
     .attr('class', 'gText')
     .attr('x', (d) => { if(d.target.x+60<=svg.attr('width')){
-      return d.target.x+10;}
+      return d.target.x+5;}
       else{
-        return d.target.x-50;
+        return d.target.x-45;
       }
  })
     .attr('y', (d) => {if(d.target.y+80<=svg.attr('height')){
@@ -680,7 +680,7 @@ export class BuildMapService{
     .attr('text-anchor', 'left')
     .attr('visibility', (d) => d.hidden ? 'hidden' : 'visible')
     .text((d) => d.text)
-    .call(this.wrap,40)
+    .call(this.wrap,50)
     .on('mousedown', (d)=>{
 
     })
@@ -692,9 +692,9 @@ export class BuildMapService{
     .append('svg:image')
     .attr('class', 'gImage')
     .attr('x', (d) => { if(d.target.x+60<=svg.attr('width')){
-      return d.target.x+10;}
+      return d.target.x+2;}
       else{
-        return d.target.x-50;
+        return d.target.x-40;
       }
  })
     .attr('y', (d) => {if(d.target.y+80<=svg.attr('height')){
